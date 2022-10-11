@@ -19,7 +19,7 @@ class BooksController < ApplicationController
         @book = Book.new(book_params)
         respond_to do |format|
             if @book.save
-                flash[:notice]="データ登録に成功"
+                flash[:notice]="データ登録に成功\n家計簿に#{@book.year}年#{@book.month}月のデータを追加"
                 format.html{redirect_to books_path(@book),notice:"1件のデータ登録"}
                 format.json{render:show, status: :created, location: @book}
             else
