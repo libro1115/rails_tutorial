@@ -1,10 +1,10 @@
 class BooksController < ApplicationController
+    before_action:set_book,only:[:show,:edit,:update,:destroy]
     def index
         @books = Book.all
     end
 
     def show
-        @book = Book.find(params[:id])
     end
 
     def new
@@ -29,11 +29,9 @@ class BooksController < ApplicationController
     end
 
     def edit
-        @book = Book.find(params[:id])
     end
 
     def update
-        @book = Book.find(params[:id])
         book_params = params.require(:book).permit(:year,:month,:inout,:category,:amount)
         if @book.update(book_params)
             flash[:notice]="データを1件更新"
@@ -45,12 +43,17 @@ class BooksController < ApplicationController
     end
     
     def destroy
-        @book = Book.find(params[:id])
+        set_book
         @book.destroy
         redirect_to do |f|
             flash[:notice]="1件のデータを削除"
             f.html{redirect_to books_path, notice:"Task was destoryed",status: :see_other}
             f.json{head:no_content}
         end
+    end
+
+    private
+    def set_book
+        @book=Book.find(params[:id])
     end
 end
